@@ -6,6 +6,7 @@ from confluent_kafka import avro
 
 from models import Turnstile
 from models.producer import Producer
+from enum import IntEnum
 
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 class Station(Producer):
     """Defines a single station"""
+    colors = IntEnum("colors", "blue green red", start=0)
+    status = IntEnum("status", "out_of_service in_service broken_down", start=0)
 
     key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/arrival_key.json")
 
@@ -44,7 +47,7 @@ class Station(Producer):
         )
 
         self.station_id = int(station_id)
-        self.color = color
+        self.color = Station.colors(color).name
         self.dir_a = direction_a
         self.dir_b = direction_b
         self.a_train = None
@@ -68,7 +71,7 @@ class Station(Producer):
                "train_id": train.train_id,
                "direction": direction,
                "line": self.color,
-               "train_status": train.status,
+               "train_status": Station.status(train.status).name,
                "prev_station_id": prev_station_id,
                "prev_direction": prev_direction
            },

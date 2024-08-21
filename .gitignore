@@ -1,0 +1,6 @@
+# Ignore virtual environments
+consumers/venv/
+producers/venv/
+
+# Ignore __pycache__ folder and its contents
+*.pyc

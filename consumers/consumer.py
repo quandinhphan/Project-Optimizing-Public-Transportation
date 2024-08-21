@@ -5,6 +5,7 @@ import confluent_kafka
 from confluent_kafka import Consumer
 from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
+from confluent_kafka.admin import AdminClient
 from tornado import gen
 
 BROKER_URL = "PLAINTEXT://localhost:9092"
@@ -61,7 +62,17 @@ class KafkaConsumer:
         # how the `on_assign` callback should be invoked.
         #
         #
-        self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
+        if self.topic_name_pattern == "^org.chicago.cta.station.arrivals.":
+            topic_list = []
+            client = AdminClient({"bootstrap.servers": BROKER_URL})
+            list_topics = client.list_topics(timeout=10)
+            for topic in list_topics.topics.keys():
+                if "org.chicago.cta.station.arrivals." in topic:
+                    topic_list.append(topic)
+            
+            self.consumer.subscribe(topic_list, on_assign=self.on_assign)
+        else:
+            self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""

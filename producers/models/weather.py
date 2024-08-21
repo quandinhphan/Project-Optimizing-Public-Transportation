@@ -106,7 +106,7 @@ class Weather(Producer):
                        "key": {"timestamp": self.time_millis()},
                        "value": {
                            "temperature": self.temp,
-                           "status": self.status
+                           "status": Weather.status(self.status).name
                        }
                    }]
                }
