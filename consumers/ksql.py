@@ -25,7 +25,7 @@ KSQL_STATEMENT = """
 CREATE TABLE turnstile (
     station_id INT,
     station_name STRING,
-    line INT
+    line STRING
 ) WITH (
     KAFKA_TOPIC='turnstile',
     VALUE_FORMAT='AVRO',
