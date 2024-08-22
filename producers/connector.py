@@ -39,7 +39,7 @@ def configure_connector():
                "value.converter.schemas.enable": "false",
                "batch.max.rows": "500",
                # TODO
-               "connection.url": "jdbc:postgresql://localhost:5432/cta",
+               "connection.url": "jdbc:postgresql://postgres:5432/cta",
                # TODO
                "connection.user": "cta_admin",
                # TODO
