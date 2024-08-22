@@ -65,8 +65,8 @@ class Producer:
         # TODO: Write code that creates the topic for this producer if it does not already exist on
         # the Kafka Broker.
         client = AdminClient({"bootstrap.servers": BROKER_URL})
-        list_topics = client.list_topics(timeout=5)
-        if self.topic_name not in set(t.topic for t in iter(list_topics.topics.values())):
+        list_topics = client.list_topics(timeout=10)
+        if self.topic_name not in list_topics.topics.keys():
             new_topic = client.create_topics(
                 [
                     NewTopic(
